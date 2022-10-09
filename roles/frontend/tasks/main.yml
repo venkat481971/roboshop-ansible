@@ -3,3 +3,32 @@
     name: nginx
     state: installed
 
+- name: Removing Old Web Content
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: absent
+
+- name: Downloading Nginx Web Content & Extract it
+  ansible.builtin.unarchive:
+    src: https://github.com/roboshop-devops-project/frontend/archive/main.zip
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy Extracted Content
+  ansible.builtin.copy:
+    src: /tmp/frontend-main/static/
+    dest: /usr/share/nginx/html/
+    remote_src: yes
+
+- name: Copy RoboShop Nginx Config file
+  ansible.builtin.template:
+    src: roboshop.conf
+    dest: /etc/nginx/default.d/roboshop.conf
+  notify: Restart Nginx Service
+
+- name: Start Nginx Service
+  ansible.builtin.systemd:
+    state: started
+    name: nginx
+    enabled: yes
+
