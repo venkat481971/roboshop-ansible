@@ -21,10 +21,9 @@
     remote_src: yes
 
 - name: Copy RoboShop Nginx Config file
-  ansible.builtin.template:
+  ansible.builtin.copy:
     src: roboshop.conf
     dest: /etc/nginx/default.d/roboshop.conf
-  notify: Restart Nginx Service
 
 - name: Start Nginx Service
   ansible.builtin.systemd:
