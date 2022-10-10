@@ -22,6 +22,12 @@
     src: /var/log/mysqld.log
   register: out
 
+- name: Check MySQL Credentials
+  community.mysql.mysql_info:
+    login_user: root
+    login_password: "{{ROBOSHOP_MYSQL_PASSWORD}}"
+    filter: version
+
 - name: Print out
   debug:
     msg: "{{ out['content'] | b64decode | regex_findall('temporary password.*') |join(' ')  | split(' ') | last }}"
