@@ -16,3 +16,12 @@
     name: mysqld
     state: started
     enabled: yes
+
+- name: Load the file
+  ansible.builtin.slurp:
+    src: /var/log/mysqld.log
+  register: out
+
+- name: Print out
+  debug:
+    msg: "{{ out['content'] | b64decode | regex_findall('temporary password.*') |join(' ')  | split(' ') | last }}"
