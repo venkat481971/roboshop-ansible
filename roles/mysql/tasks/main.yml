@@ -49,3 +49,32 @@
 - name: Change the root password
   ansible.builtin.shell: mysql --connect-expired-password -uroot -p"{{ out['content'] | b64decode | regex_findall('temporary password.*') |join(' ')  | split(' ') | last }}" </tmp/reset-root-pass.sql
   when: mysql_conn_status is failed
+
+- name: Check MySQL Password Validate Plugin
+  community.mysql.mysql_query:
+    query: 'show plugins'
+    login_user: root
+    login_password: "{{ROBOSHOP_MYSQL_PASSWORD}}"
+  ignore_errors: yes
+  register: plugins_status
+
+- name: Uninstall Password Validate Plugin
+  community.mysql.mysql_query:
+    query: 'uninstall plugin validate_password;'
+    login_user: root
+    login_password: "{{ROBOSHOP_MYSQL_PASSWORD}}"
+  when: plugins_status | regex_findall('validate_password') | length > 0
+
+- name: Downloading Schema Files
+  ansible.builtin.unarchive:
+    src: https://github.com/roboshop-devops-project/mysql/archive/main.zip
+    dest: /tmp
+    remote_src: yes
+
+- name: Load Schema
+  community.mysql.mysql_db:
+    state: import
+    name: all
+    target: /tmp/mysql-main/shipping.sql
+    login_user: root
+    login_password: "{{ROBOSHOP_MYSQL_PASSWORD}}"
