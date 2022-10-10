@@ -18,8 +18,8 @@
 
 - name: Add application user
   community.rabbitmq.rabbitmq_user:
-    user: "{{SECRETS.ROBOSHOP_RABBITMQ_USER}}"
-    password: "{{SECRETS.ROBOSHOP_RABBITMQ_PASSWORD}}"
+    user: roboshop
+    password: "{{ROBOSHOP_RABBITMQ_PASSWORD}}"
     vhost: /
     configure_priv: .*
     read_priv: .*
