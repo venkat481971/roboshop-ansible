@@ -1,0 +1,16 @@
+- name: Install Maven
+  ansible.builtin.yum:
+    name: maven
+    state: installed
+
+- name: Import App Pre-Req Task file
+  ansible.builtin.import_tasks: app-prereq.yml
+
+- name: Install Maven Dependencies
+  ansible.builtin.shell: mvn clean package && mv target/{{COMPONENT}}-1.0.jar {{COMPONENT}}.jar
+  args:
+    chdir: /home/roboshop/{{COMPONENT}}
+  become_user: roboshop
+
+- name: Import SystemD tasks
+  ansible.builtin.import_tasks: systemd.yml
