@@ -3,7 +3,7 @@
   tasks:
     - name: Update a Parameter
       community.aws.aws_ssm_parameter_store:
-        name: "{{item.name}}"
+        name: "roboshop.dev.catalogue.MONGO_URL"
         string_type: "String"
-        value: "{{item.value}}"
+        value: "xyz"
         overwrite_value: "always"
