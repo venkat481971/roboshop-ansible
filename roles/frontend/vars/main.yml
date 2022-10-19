@@ -1,3 +1,4 @@
 COMPONENT: frontend
 PROMETHEUS_MONITOR: yes
 RSYSLOG_CONFIG: false
+FILEBEAT_INPUT_LOG_FILE: /var/log/nginx/access.log
