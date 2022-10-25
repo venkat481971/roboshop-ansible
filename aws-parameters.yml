@@ -23,3 +23,4 @@
         - { name: "roboshop.dev.shipping.DB_HOST", value: "mysql-dev.roboshop.internal"}
         - { name: "roboshop.dev.user.REDIS_HOST", value: "redis-dev.roboshop.internal"}
         - { name: "roboshop.dev.user.MONGO_URL", value: "mongodb://mongodb-dev.roboshop.internal:27017/users"}
+        - { name: "test", value: "test" }
