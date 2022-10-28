@@ -8,16 +8,28 @@
     path: /usr/share/nginx/html
     state: absent
 
-- name: Downloading Nginx Web Content & Extract it
-  ansible.builtin.unarchive:
-    src: https://github.com/roboshop-devops-project/frontend/archive/main.zip
-    dest: /tmp
-    remote_src: yes
+# commented this to move towards standard process of downloading the content from artifact manager rather than downloading from git repo
+#- name: Downloading Nginx Web Content & Extract it
+#  ansible.builtin.unarchive:
+#    src: https://github.com/roboshop-devops-project/frontend/archive/main.zip
+#    dest: /tmp
+#    remote_src: yes
+#
+#- name: Copy Extracted Content
+#  ansible.builtin.copy:
+#    src: /tmp/frontend-main/static/
+#    dest: /usr/share/nginx/html/
+#    remote_src: yes
 
-- name: Copy Extracted Content
-  ansible.builtin.copy:
-    src: /tmp/frontend-main/static/
-    dest: /usr/share/nginx/html/
+- name: Create application directory
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: directory
+
+- name: Downloading Application Content
+  ansible.builtin.unarchive:
+    src: http://{{NEXUS_USER}}:{{NEXUS_PASS}}@nexus.roboshop.internal:8081/repository/{{COMPONENT}}/{{COMPONENT}}-{{APP_VERSION}}.zip
+    dest: /usr/share/nginx/html
     remote_src: yes
 
 - name: Copy Nginx Service Config file
