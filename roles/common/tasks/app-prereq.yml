@@ -8,15 +8,31 @@
     path: /home/roboshop/{{COMPONENT}}
     state: absent
 
+## Commented this to move towards standard process of downloading the content from artifact manager rather than downloading from git repo
+#- name: Downloading Application Content
+#  ansible.builtin.unarchive:
+#    src: https://github.com/roboshop-devops-project/{{COMPONENT}}/archive/main.zip
+#    dest: /tmp
+#    remote_src: yes
+
+- name: Create Application Directory
+  ansible.builtin.file:
+    path: /home/roboshop/{{COMPONENT}}
+    state: directory
+    owner: roboshop
+    group: roboshop
+
 - name: Downloading Application Content
   ansible.builtin.unarchive:
-    src: https://github.com/roboshop-devops-project/{{COMPONENT}}/archive/main.zip
-    dest: /tmp
-    remote_src: yes
-
-- name: Copy Extracted App Content
-  ansible.builtin.copy:
-    src: /tmp/{{COMPONENT}}-main/
-    dest: /home/roboshop/{{COMPONENT}}/
+    src: http://{{NEXUS_USER}}:{{NEXUS_PASS}}@nexus.roboshop.internal:8081/repository/{{COMPONENT}}/{{COMPONENT}}-{{APP_VERSION}}.zip
+    dest: /home/roboshop/{{COMPONENT}}
     remote_src: yes
   become_user: roboshop
+
+## Commented this to move towards standard process of downloading the content from artifact manager rather than downloading from git repo
+#- name: Copy Extracted App Content
+#  ansible.builtin.copy:
+#    src: /tmp/{{COMPONENT}}-main/
+#    dest: /home/roboshop/{{COMPONENT}}/
+#    remote_src: yes
+#  become_user: roboshop

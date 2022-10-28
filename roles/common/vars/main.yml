@@ -1,0 +1,3 @@
+SECRETS: "{{lookup('amazon.aws.aws_secret', 'roboshop/all-secrets', region='us-east-1')}}"
+NEXUS_USER: "{{SECRETS.NEXUS_USER}}"
+NEXUS_PASS: "{{SECRETS.NEXUS_PASS}}"
